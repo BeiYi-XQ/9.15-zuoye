@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>哭唧唧的小张</title>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>  
+<style>
+  body {
+    background-color: #ffffff;
+    font-family: 'SimSun', '宋体', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  .wrapDiv {
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .leftBox {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+
+  .nameBox {
+    width: 100%;
+    height: 60px;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.3s ease;
+  }
+
+  .nameBox:hover {
+    background-color: #ddd;
+  }
+
+  #btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background-color: #5cb85c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 1rem;
+  }
+
+  #btn:hover {
+    background-color: #4cae4c;
+  }
+
+  .selectedName {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .selectedName .nameBox {
+    height: 40px;
+    animation: slideIn 0.5s ease;
+  }
+
+  /* 增加动画效果 */
+  @keyframes slideIn {
+    0% {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .animated-pop {
+    animation: pop 0.5s ease;
+  }
+</style>
+</head>
+<body>
+  <h1>啊！编号战神</h1>
+
+  <div class="wrapDiv">
+    <div id="leftBox" class="leftBox"></div>
+    <div id="selectedName" class="selectedName"></div>
+    <button id="btn">鞭策我吧</button>
+  </div>
+
+  <script>
+    (function() {
+      var arr = ["01", "02", "03", "04", "05", "06", "07", "08", "09"];
+      var selectedNames = [];
+      var drawCount = 0;
+
+      function initForm() {
+        dynamicCreateBox();
+      }
+
+      function dynamicCreateBox() {
+        $('#leftBox').empty();
+        arr.forEach(function(number, index) {
+          var div = $('<div class="nameBox" data-number="' + number + '"></div>').text(number);
+          $('#leftBox').append(div);
+        });
+      }
+
+      function selectWinner() {
+        if (drawCount < 3) {
+          var randomIndex = Math.floor(Math.random() * arr.length);
+          var number = arr[randomIndex];
+          $('.nameBox').removeClass('animated-pop');
+          arr.splice(randomIndex, 1); // 从抽奖池中移除选中的号码
+          $('.nameBox[data-number="' + number + '"]').addClass('animated-pop');
+          appendSelectedName(number);
+          drawCount++;
+        } else {
+          alert('不许多抽！');
+        }
+      }
+
+      function appendSelectedName(number) {
+        var newDiv = $('<div class="nameBox" data-number="' + number + '"></div>').text(number);
+        $('#selectedName').append(newDiv);
+      }
+
+      $('#btn').on('click', function() {
+        selectWinner();
+      });
+
+      initForm();
+    })();
+  </script>
+</body>
+</html>
